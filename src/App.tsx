@@ -21,7 +21,7 @@ function App() {
     return (
         <>
             <div>
-                <DataTable columns={UserTableColumns} data={AllUsers ?? DumyData} />
+                <DataTable columns={UserTableColumns} data={AllUsers?.payload ?? DumyData} />
                 {/* <NewTable/> */}
             </div>
         </>

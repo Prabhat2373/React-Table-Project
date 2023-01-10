@@ -87,7 +87,7 @@ function DataTable({ columns, data }: DataTableTypes) {
           <table {...getTableProps()} className="w-full p-4 border-collapse border border-gray-300 ">
             <thead>
               {headerGroups?.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()} className="">
+                <tr {...headerGroup?.getHeaderGroupProps()} className="">
                   {headerGroup.headers?.map(column => (
                     <th {...column.getHeaderProps(column.getSortByToggleProps())} title="Toggle Sort" className="text-left p-4">
                       {/* {console.log(column.getSortByToggleProps())} */}

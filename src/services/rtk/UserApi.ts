@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const UsersApi = createApi({
     reducerPath: 'UsersApi',
-    baseQuery: fetchBaseQuery({ baseUrl: "https://gorest.co.in/public/v2/" }),
+    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8001/api/v1/" }),
     endpoints: (builder) => ({
         getPosts: builder.query({
             query: (id: number) => `/${id}`,
