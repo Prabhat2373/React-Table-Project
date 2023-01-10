@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useTable, useSortBy, Column, TableOptions, usePagination } from "react-table";
 import PagiationNavs from "./PagiationNavs";
+import { useGetExportCSVMutation } from "../services/rtk/UserApi";
 
 
 // const columns: Column<Data>[] = [
@@ -44,6 +45,9 @@ function DataTable({ columns, data }: DataTableTypes) {
     state
   } = useTable<TableDataType>({ columns, data, initialState: { pageIndex: 2 } }, useSortBy, usePagination);
   const { pageIndex, pageSize } = state;
+
+  const [DownloadCSV] = useGetExportCSVMutation()
+
   return (
     <>
       <div>
@@ -76,7 +80,10 @@ function DataTable({ columns, data }: DataTableTypes) {
               <p>Lorem ipsum dolor sit amet consectetur adipisicing </p>
             </div>
             <div className="flex gap-4">
-              <button className="border border-gray-300 p-2 rounded-lg font-semibold">
+              <button className="border border-gray-300 p-2 rounded-lg font-semibold" onClick={() => {
+                console.log("DOWNLOADING...")
+                DownloadCSV("")
+              }}>
                 Download CSV
               </button>
               <button className="p-2 bg-blue-500 text-white rounded-lg">
@@ -127,7 +134,7 @@ function DataTable({ columns, data }: DataTableTypes) {
           
           </button>{" "} */}
           <div>
-            <button onClick={() => previousPage()} disabled={!canPreviousPage} className="inline-flex items-center px-4 py-2 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            <button onClick={() => previousPage()} disabled={!canPreviousPage} className="inline-flex items-center px-4 py-2 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 ">
               <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
               Previous
             </button>
@@ -170,7 +177,7 @@ function DataTable({ columns, data }: DataTableTypes) {
             ))}
           </select> */}
           <div>
-            <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" onClick={() => nextPage()} disabled={!canNextPage}>
+            <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700" onClick={() => nextPage()} disabled={!canNextPage}>
               Next
               <svg aria-hidden="true" className="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
             </button>

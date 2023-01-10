@@ -20,9 +20,8 @@ function App() {
 
     return (
         <>
-            <div>
+            <div className="my-auto mx-10">
                 <DataTable columns={UserTableColumns} data={AllUsers?.payload ?? DumyData} />
-                {/* <NewTable/> */}
             </div>
         </>
     );

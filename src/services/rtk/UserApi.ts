@@ -10,8 +10,19 @@ export const UsersApi = createApi({
             query: () => ({
                 url: "users"
             })
+        }),
+        getExportCSV: builder.mutation({
+            query: () => ({
+                url: "exportCSV"
+            })
+        }),
+        CreateUser: builder.mutation({
+            query: (args) => ({
+                url: "/user/:id",
+                body: args
+            })
         })
     }),
 })
 
-export const { useGetAllUsersQuery } = UsersApi
+export const { useGetAllUsersQuery, useGetExportCSVMutation } = UsersApi
