@@ -2,23 +2,18 @@ import * as React from "react";
 import { useTable, useSortBy, Column, TableOptions, usePagination } from "react-table";
 import PagiationNavs from "./PagiationNavs";
 import { useLazyGetExportCSVQuery } from "../services/rtk/UserApi";
+import Modal from "./Modal";
+import DownArrow from "../icons/DownArrow";
+import UpArrow from "../icons/UpArrow";
 
-// const columns: Column<Data>[] = [
-//   {
-//     Header: "name",
-//     accessor: "name"
-//   },
-//   {
-//     Header: "email",
-//     accessor: "email"
-//   }
-// ];
 
 export interface TableDataType {
   name: string;
   status?: string;
   role?: string;
   lastLogin?: string;
+  actions?: string;
+  disableMenu?: boolean;
 }
 interface DataTableTypes {
   columns: Column<TableDataType>[];
@@ -44,6 +39,7 @@ function DataTable({ columns, data }: DataTableTypes) {
     state
   } = useTable<TableDataType>({ columns, data, initialState: { pageIndex: 2 } }, useSortBy, usePagination);
   const { pageIndex, pageSize } = state;
+  const [isOpen, setIsOpen] = React.useState(false);
   const [DownloadCSV, { data: CSVFile, isLoading: isFileLoading }] = useLazyGetExportCSVQuery()
   console.log("AFTER DOWN", CSVFile);
 
@@ -51,6 +47,7 @@ function DataTable({ columns, data }: DataTableTypes) {
   return (
     <>
       <div>
+        {<Modal isOpen={isOpen} setIsOpen={setIsOpen} />}
         <div className="table-top flex flex-col gap-7 pb-10">
           <h1 className="text-4xl font-semibold">Company Settings</h1>
           <div>
@@ -105,7 +102,11 @@ function DataTable({ columns, data }: DataTableTypes) {
               }}>
                 {isFileLoading ? "Loading..." : "Download CSV"}
               </button>
-              <button className="p-2 bg-blue-500 text-white rounded-lg">
+              <button className="p-2 bg-blue-500 text-white rounded-lg" onClick={() => {
+                setIsOpen((prev) => !prev)
+                console.log(isOpen);
+
+              }}>
                 Add User
               </button>
             </div>
@@ -117,14 +118,16 @@ function DataTable({ columns, data }: DataTableTypes) {
                   {headerGroup.headers?.map(column => (
                     <th {...column.getHeaderProps(column.getSortByToggleProps())} title="Toggle Sort" className="text-left p-4">
                       {/* {console.log(column.getSortByToggleProps())} */}
-                      {column.render("Header")}
-                      <span>
-                        {" "}
-                        {column.isSorted
-                          ? column.isSortedDesc
-                            ? " 🔽"
-                            : " 🔼"
-                          : ""}{" "}
+                      <span className="flex items-center">
+                        {column.render("Header")}
+                        <span>
+                          {" "}
+                          {column.isSorted
+                            ? column.isSortedDesc
+                              ? <DownArrow />
+                              : <UpArrow />
+                            : ""}{" "}
+                        </span>
                       </span>
                     </th>
                   ))}
@@ -135,9 +138,11 @@ function DataTable({ columns, data }: DataTableTypes) {
               {rows?.map((row, i) => {
                 prepareRow(row);
                 return (
-                  <tr {...row.getRowProps()} className="border border-slate-600">
-                    {row?.cells?.map(cell => {
-                      return <td {...cell?.getCellProps()} className="p-4">{cell.render("Cell")}</td>;
+                  <tr {...row.getRowProps()} className="border ">
+                    {row?.cells?.map((cell: any) => {
+                      console.log(cell.render("Cell")?.props?.allColumns[0]);
+
+                      return <td {...cell?.getCellProps()} className="p-4 first:w-2/4">{cell.render("Cell")}</td>;
                     })}
                   </tr>
                 );
