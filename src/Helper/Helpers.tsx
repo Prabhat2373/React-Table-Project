@@ -151,7 +151,7 @@ export const fuzzyTextFilterFn = function ({ rows, id, filterValue }: any) {
 
 export const DefaultColumnFilter = ({
     column: { filterValue, preFilteredRows, setFilter }
-}:any) => {
+}: any) => {
     const count = preFilteredRows.length;
 
     return (
@@ -164,3 +164,5 @@ export const DefaultColumnFilter = ({
         />
     );
 }
+
+

@@ -3,7 +3,6 @@ import { useTable, useSortBy, Column, TableOptions, usePagination } from "react-
 import PagiationNavs from "./PagiationNavs";
 import { useLazyGetExportCSVQuery } from "../services/rtk/UserApi";
 
-
 // const columns: Column<Data>[] = [
 //   {
 //     Header: "name",
@@ -45,8 +44,9 @@ function DataTable({ columns, data }: DataTableTypes) {
     state
   } = useTable<TableDataType>({ columns, data, initialState: { pageIndex: 2 } }, useSortBy, usePagination);
   const { pageIndex, pageSize } = state;
-  const [DownloadCSV, { data: CSVFile }] = useLazyGetExportCSVQuery()
-  console.log("AFTER DOWN",CSVFile);
+  const [DownloadCSV, { data: CSVFile, isLoading: isFileLoading }] = useLazyGetExportCSVQuery()
+  console.log("AFTER DOWN", CSVFile);
+
 
   return (
     <>
@@ -79,12 +79,31 @@ function DataTable({ columns, data }: DataTableTypes) {
               <h1 className="font-semibold text-lg">Users  <span className="px-2 py-1 text-base bg-green-50 text-green-500 rounded-3xl">42 users</span></h1>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing </p>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4" id="down">
               <button className="border border-gray-300 p-2 rounded-lg font-semibold" onClick={() => {
                 console.log("DOWNLOADING...")
-                DownloadCSV('')
+                DownloadCSV('').then((response: any) => {
+                  console.log("API RES :", response);
+
+                  const url = window.URL.createObjectURL(new Blob([CSVFile]));
+                  console.log(url);
+
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.setAttribute(
+                    "download",
+                    `users.csv`
+                  );
+
+                  document.body.appendChild(link);
+                  link.click();
+                  link?.parentNode?.removeChild(link);
+
+                })
+                // fileDownload(`http://localhost:8001/api/v1/exportCSV
+                // `, `users.csv`)
               }}>
-                Download CSV
+                {isFileLoading ? "Loading..." : "Download CSV"}
               </button>
               <button className="p-2 bg-blue-500 text-white rounded-lg">
                 Add User

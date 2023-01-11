@@ -6,6 +6,7 @@ import { UserTableColumns } from './Components/UserTableColumns';
 import { TableData } from './Helper/TableData';
 import { useGetAllUsersQuery } from './services/rtk/UserApi';
 import { DumyData } from './DumyData';
+import Modal from './Components/Modal';
 
 function App() {
     const [Users, setUsers] = useState([]);
@@ -21,7 +22,8 @@ function App() {
     return (
         <>
             <div className="my-auto mx-10">
-                <DataTable columns={UserTableColumns} data={AllUsers?.payload ?? DumyData} />
+                {/* <DataTable columns={UserTableColumns} data={AllUsers?.payload ?? DumyData} /> */}
+                <Modal />
             </div>
         </>
     );
