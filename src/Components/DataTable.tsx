@@ -140,9 +140,7 @@ function DataTable({ columns, data }: DataTableTypes) {
                 return (
                   <tr {...row.getRowProps()} className="border ">
                     {row?.cells?.map((cell: any) => {
-                      console.log(cell.render("Cell")?.props?.allColumns[0]);
-
-                      return <td {...cell?.getCellProps()} className="p-4 first:w-2/4">{cell.render("Cell")}</td>;
+                      return <td {...cell?.getCellProps()} className="p-4 first:w-2/4">{cell.render("Cell") ?? "N.A."}</td>;
                     })}
                   </tr>
                 );

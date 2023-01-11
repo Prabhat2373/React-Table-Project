@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const UsersApi = createApi({
     reducerPath: 'UsersApi',
-    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8001/api/v1/" }),
+    baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_ENVIROMENT === "developement" ? process.env.REACT_APP_DEV_BASE_URL : process.env.REACT_APP_BASE_URL_PROD }),
     endpoints: (builder) => ({
         getPosts: builder.query({
             query: (id: number) => `/${id}`,
@@ -19,11 +19,12 @@ export const UsersApi = createApi({
         }),
         CreateUser: builder.mutation({
             query: (args) => ({
-                url: "/user/:id",
-                body: args
+                url: "/user",
+                body: args,
+                method:"POST"
             })
         })
     }),
 })
 
-export const { useGetAllUsersQuery, useLazyGetExportCSVQuery } = UsersApi
+export const { useGetAllUsersQuery, useLazyGetExportCSVQuery,useCreateUserMutation } = UsersApi
