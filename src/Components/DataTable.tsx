@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTable, useSortBy, Column, TableOptions, usePagination } from "react-table";
 import PagiationNavs from "./PagiationNavs";
-import { useGetExportCSVMutation } from "../services/rtk/UserApi";
+import { useLazyGetExportCSVQuery } from "../services/rtk/UserApi";
 
 
 // const columns: Column<Data>[] = [
@@ -45,8 +45,8 @@ function DataTable({ columns, data }: DataTableTypes) {
     state
   } = useTable<TableDataType>({ columns, data, initialState: { pageIndex: 2 } }, useSortBy, usePagination);
   const { pageIndex, pageSize } = state;
-
-  const [DownloadCSV] = useGetExportCSVMutation()
+  const [DownloadCSV, { data: CSVFile }] = useLazyGetExportCSVQuery()
+  console.log("AFTER DOWN",CSVFile);
 
   return (
     <>
@@ -82,7 +82,7 @@ function DataTable({ columns, data }: DataTableTypes) {
             <div className="flex gap-4">
               <button className="border border-gray-300 p-2 rounded-lg font-semibold" onClick={() => {
                 console.log("DOWNLOADING...")
-                DownloadCSV("")
+                DownloadCSV('')
               }}>
                 Download CSV
               </button>

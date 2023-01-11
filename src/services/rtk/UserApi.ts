@@ -11,9 +11,10 @@ export const UsersApi = createApi({
                 url: "users"
             })
         }),
-        getExportCSV: builder.mutation({
+        getExportCSV: builder.query({
             query: () => ({
-                url: "exportCSV"
+                url: "exportCSV",
+                responseHandler: (response) => response.blob()
             })
         }),
         CreateUser: builder.mutation({
@@ -25,4 +26,4 @@ export const UsersApi = createApi({
     }),
 })
 
-export const { useGetAllUsersQuery, useGetExportCSVMutation } = UsersApi
+export const { useGetAllUsersQuery, useLazyGetExportCSVQuery } = UsersApi
