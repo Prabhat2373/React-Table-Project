@@ -119,7 +119,7 @@ function DataTable({ columns, data }: DataTableTypes) {
                     <th {...column.getHeaderProps(column.getSortByToggleProps())} title="Toggle Sort" className="text-left p-4">
                       {/* {console.log(column.getSortByToggleProps())} */}
                       <span className="flex items-center">
-                        {column.render("Header")}
+                        {column.render("Header") === "Actions" ? "" : column?.render("Header")}
                         <span>
                           {" "}
                           {column.isSorted
