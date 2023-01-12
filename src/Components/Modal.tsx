@@ -24,7 +24,7 @@ export default function Modal({ isOpen, setIsOpen }: ModalProps) {
     const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         console.log(responseBody)
-        CreateUser(JSON.stringify(responseBody)).then(() => {
+        CreateUser(responseBody).then(() => {
             setIsFormSubmitted(true)
         })
         //Form submission happens here

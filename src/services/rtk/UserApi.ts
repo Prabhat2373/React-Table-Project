@@ -21,7 +21,7 @@ export const UsersApi = createApi({
             query: (args) => ({
                 url: "/user",
                 body: args,
-                method:"POST"
+                method:"POST",
             })
         })
     }),
