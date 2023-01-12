@@ -3,6 +3,7 @@ import { TableDataType } from "./DataTable";
 import moment from 'moment'
 import Bin from "../icons/Bin";
 import Edit from './../icons/Edit';
+import DeleteUserFn from '../Helper/DeleteUserFn';
 
 export const UserTableColumns: Column<TableDataType>[] = [
   {
@@ -77,6 +78,7 @@ export const UserTableColumns: Column<TableDataType>[] = [
           <span className="flex gap-2">
             <button onClick={() => {
               console.log(row?.original?._id)
+              DeleteUserFn(row?.original?._id)
             }}>
               <Bin className="cursor-pointer" />
             </button>

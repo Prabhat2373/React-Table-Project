@@ -21,10 +21,24 @@ export const UsersApi = createApi({
             query: (args) => ({
                 url: "/user",
                 body: args,
-                method:"POST",
+                method: "POST",
+            })
+        }),
+        UpdateUser: builder.mutation({
+            query: (args: any) => ({
+                url: "user/:id",
+                body: args,
+                method: "PUT"
+            })
+        }),
+        DeleteUser: builder.mutation({
+            query: (args: any) => ({
+                url: `user/${args}`,
+                // body: args,
+                method: "DELETE"
             })
         })
     }),
 })
 
-export const { useGetAllUsersQuery, useLazyGetExportCSVQuery,useCreateUserMutation } = UsersApi
+export const { useGetAllUsersQuery, useLazyGetExportCSVQuery, useCreateUserMutation, useUpdateUserMutation, useDeleteUserMutation } = UsersApi
