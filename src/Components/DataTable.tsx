@@ -5,6 +5,7 @@ import { useLazyGetExportCSVQuery } from "../services/rtk/UserApi";
 import Modal from "./Modal";
 import DownArrow from "../icons/DownArrow";
 import UpArrow from "../icons/UpArrow";
+import CreateUserForm from './Forms/CreateUserForm';
 
 
 export interface TableDataType {
@@ -14,7 +15,7 @@ export interface TableDataType {
   lastLogin?: string;
   actions?: string;
   disableMenu?: boolean;
-  _id:string;
+  _id: string;
 }
 interface DataTableTypes {
   columns: Column<TableDataType>[];
@@ -39,8 +40,8 @@ function DataTable({ columns, data }: DataTableTypes) {
     setPageSize,
     state
   } = useTable<TableDataType>({ columns, data, initialState: { pageIndex: 2 } }, useSortBy, usePagination);
-  const { pageIndex, pageSize } = state;
   const [isOpen, setIsOpen] = React.useState(false);
+  const { pageIndex, pageSize } = state;
   const [DownloadCSV, { data: CSVFile, isLoading: isFileLoading }] = useLazyGetExportCSVQuery()
   console.log("AFTER DOWN", CSVFile);
 
@@ -48,7 +49,7 @@ function DataTable({ columns, data }: DataTableTypes) {
   return (
     <>
       <div>
-        {<Modal isOpen={isOpen} setIsOpen={setIsOpen} />}
+        {<Modal isOpen={isOpen} setIsOpen={setIsOpen} children={<CreateUserForm />} />}
         <div className="table-top flex flex-col gap-7 pb-10">
           <h1 className="text-4xl font-semibold">Company Settings</h1>
           <div>
@@ -80,24 +81,28 @@ function DataTable({ columns, data }: DataTableTypes) {
             <div className="flex gap-4" id="down">
               <button className="border border-gray-300 p-2 rounded-lg font-semibold" onClick={() => {
                 console.log("DOWNLOADING...")
-                DownloadCSV('').then((response: any) => {
-                  console.log("API RES :", response);
+                setTimeout(() => {
+                  DownloadCSV('').then((response: any) => {
+                    console.log("API RES :", response);
+                    let url = "";
 
-                  const url = window.URL.createObjectURL(new Blob([CSVFile]));
-                  console.log(url);
+                    url = window.URL.createObjectURL(new Blob([CSVFile]));
+                    console.log(url);
 
-                  const link = document.createElement("a");
-                  link.href = url;
-                  link.setAttribute(
-                    "download",
-                    `users.csv`
-                  );
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.setAttribute(
+                      "download",
+                      `users.csv`
+                    );
 
-                  document.body.appendChild(link);
-                  link.click();
-                  link?.parentNode?.removeChild(link);
+                    document.body.appendChild(link);
+                    link.click();
+                    link?.parentNode?.removeChild(link);
 
-                })
+                  })
+
+                }, 500);
                 // fileDownload(`http://localhost:8001/api/v1/exportCSV
                 // `, `users.csv`)
               }}>

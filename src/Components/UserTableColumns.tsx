@@ -1,9 +1,13 @@
 import { Column } from "react-table";
 import { TableDataType } from "./DataTable";
-import moment from 'moment'
+// import moment from 'moment'
 import Bin from "../icons/Bin";
 import Edit from './../icons/Edit';
-import DeleteUserFn from '../Helper/DeleteUserFn';
+import Modal from "./Modal";
+import EditUserForm from './Forms/EditUserForm';
+import { useState } from 'react';
+import moment from 'moment';
+import { useDeleteUserMutation, useUpdateUserMutation } from "../services/rtk/UserApi";
 
 export const UserTableColumns: Column<TableDataType>[] = [
   {
@@ -65,6 +69,7 @@ export const UserTableColumns: Column<TableDataType>[] = [
       return (
         <>
           <span>{moment(row?.original?.lastLogin).format("MMM Do YY") ?? "N.A."}</span>
+          {/* <span>{row?.original?.lastLogin ?? "N.A."}</span> */}
         </>
       )
     }
@@ -73,20 +78,41 @@ export const UserTableColumns: Column<TableDataType>[] = [
     Header: 'actions',
     accessor: "actions",
     Cell: ({ row }: any) => {
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [DeleteUser] = useDeleteUserMutation();
+      function DeleteUserFn(id: string | number) {
+        DeleteUser(id).then(() => {
+          console.log("SUCCESS");
+          window.location.reload(); // IGONRE THIS BECAUSE REDUX ISNT'S SETTED UP.
+        }).catch((err) => err?.message)
+      }
+      function UpdateUser({ data }: any) {
+        const [UpdateUser] = useUpdateUserMutation();
+
+      }
       return (
         <>
           <span className="flex gap-2">
-            <button onClick={() => {
+          <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen} children={<EditUserForm />} />
+          {row?.original?.role.toLowerCase() === "admin" ?  <span>
+           <button onClick={() => {
               console.log(row?.original?._id)
-              DeleteUserFn(row?.original?._id)
+              let conf = window.confirm("Are You Sure To Delete This User")
+              // conf === true ? DeleteUserFn(row?.original?._id) : "false";
+              if (conf === true) {
+                console.log("CONDITIOM IS TRUE");
+                DeleteUserFn(row?.original?._id)
+              }
             }}>
               <Bin className="cursor-pointer" />
             </button>
             <button onClick={() => {
+              setIsModalOpen((prev) => !prev)
               console.log(row?.original?._id)
             }}>
               <Edit />
             </button>
+           </span> : <></>}
           </span>
         </>
       )
