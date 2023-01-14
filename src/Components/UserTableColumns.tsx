@@ -3,7 +3,7 @@ import { TableDataType } from "./DataTable";
 // import moment from 'moment'
 import Bin from "../icons/Bin";
 import Edit from './../icons/Edit';
-import Modal from "./Modal";
+import Modal from "../Components/Modals/Modal";
 import EditUserForm from './Forms/EditUserForm';
 import { useState } from 'react';
 import moment from 'moment';
@@ -93,26 +93,26 @@ export const UserTableColumns: Column<TableDataType>[] = [
       return (
         <>
           <span className="flex gap-2">
-          <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen} children={<EditUserForm />} />
-          {row?.original?.role.toLowerCase() === "admin" ?  <span>
-           <button onClick={() => {
-              console.log(row?.original?._id)
-              let conf = window.confirm("Are You Sure To Delete This User")
-              // conf === true ? DeleteUserFn(row?.original?._id) : "false";
-              if (conf === true) {
-                console.log("CONDITIOM IS TRUE");
-                DeleteUserFn(row?.original?._id)
-              }
-            }}>
-              <Bin className="cursor-pointer" />
-            </button>
-            <button onClick={() => {
-              setIsModalOpen((prev) => !prev)
-              console.log(row?.original?._id)
-            }}>
-              <Edit />
-            </button>
-           </span> : <></>}
+            <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen} children={<EditUserForm id={row?.original?._id} />} />
+            {row?.original?.role.toLowerCase() === "admin" ? <span>
+              <button onClick={() => {
+                console.log(row?.original?._id)
+                let conf = window.confirm("Are You Sure To Delete This User")
+                // conf === true ? DeleteUserFn(row?.original?._id) : "false";
+                if (conf === true) {
+                  console.log("CONDITIOM IS TRUE");
+                  DeleteUserFn(row?.original?._id)
+                }
+              }}>
+                <Bin className="cursor-pointer" />
+              </button>
+              <button onClick={() => {
+                setIsModalOpen((prev) => !prev)
+                console.log(row?.original?._id)
+              }}>
+                <Edit />
+              </button>
+            </span> : <></>}
           </span>
         </>
       )

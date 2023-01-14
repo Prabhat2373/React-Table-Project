@@ -2,10 +2,11 @@ import * as React from "react";
 import { useTable, useSortBy, Column, TableOptions, usePagination } from "react-table";
 import PagiationNavs from "./PagiationNavs";
 import { useLazyGetExportCSVQuery } from "../services/rtk/UserApi";
-import Modal from "./Modal";
+import Modal from "../Components/Modals/Modal";
 import DownArrow from "../icons/DownArrow";
 import UpArrow from "../icons/UpArrow";
 import CreateUserForm from './Forms/CreateUserForm';
+import { fileDownload } from "../Helper/FileDownload";
 
 
 export interface TableDataType {
@@ -43,6 +44,7 @@ function DataTable({ columns, data }: DataTableTypes) {
   const [isOpen, setIsOpen] = React.useState(false);
   const { pageIndex, pageSize } = state;
   const [DownloadCSV, { data: CSVFile, isLoading: isFileLoading }] = useLazyGetExportCSVQuery()
+  let ReadyFile;
   console.log("AFTER DOWN", CSVFile);
 
 
@@ -81,28 +83,28 @@ function DataTable({ columns, data }: DataTableTypes) {
             <div className="flex gap-4" id="down">
               <button className="border border-gray-300 p-2 rounded-lg font-semibold" onClick={() => {
                 console.log("DOWNLOADING...")
-                setTimeout(() => {
-                  DownloadCSV('').then((response: any) => {
-                    console.log("API RES :", response);
-                    let url = "";
 
-                    url = window.URL.createObjectURL(new Blob([CSVFile]));
-                    console.log(url);
+                DownloadCSV('').then((response: any) => {
+                  console.log("API RES :", response);
+                  let url = "";
+                  ReadyFile = CSVFile;
 
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.setAttribute(
-                      "download",
-                      `users.csv`
-                    );
+                  url = window.URL.createObjectURL(new Blob([ReadyFile]));
+                  console.log(url);
 
-                    document.body.appendChild(link);
-                    link.click();
-                    link?.parentNode?.removeChild(link);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.setAttribute(
+                    "download",
+                    `users.csv`
+                  );
 
-                  })
+                  document.body.appendChild(link);
+                  link.click();
+                  link?.parentNode?.removeChild(link);
 
-                }, 500);
+                })
+
                 // fileDownload(`http://localhost:8001/api/v1/exportCSV
                 // `, `users.csv`)
               }}>

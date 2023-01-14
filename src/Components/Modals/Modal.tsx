@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useCreateUserMutation } from "../services/rtk/UserApi";
 interface ModalProps {
     isOpen: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
